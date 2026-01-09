@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Make Food - Your Intelligent Sous Chef | See. Think. Guide. Taste.</title>
+    <meta name="description" content="The AI-powered cooking assistant that scans your ingredients, suggests recipes, and guides you through every step with real-time visual coaching. Cook smarter, eat better.">
+    <meta name="keywords" content="AI cooking, recipe app, meal planning, cooking assistant, smart kitchen, ingredient scanner, cooking guidance">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="AI Make Food - Your Intelligent Sous Chef">
+    <meta property="og:description" content="Real-time AI cooking guidance from pantry to plate. Scan ingredients, get recipes, cook with confidence.">
+    <meta property="og:image" content="og-image.jpg">
+    <meta property="og:url" content="https://aimakefood.com">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AI Make Food - Your Intelligent Sous Chef">
+    <meta name="twitter:description" content="Real-time AI cooking guidance from pantry to plate.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX');
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary-orange: #FF6B35;
+            --primary-dark-orange: #E55A2B;
+            --secondary-teal: #2EC4B6;
+            --secondary-dark-teal: #25A89C;
+            --accent-gold: #F4A261;
+            --accent-cream: #FFF8F0;
+            --text-dark: #1A1A2E;
+            --text-medium: #3D3D5C;
+            --text-light: #6B7280;
+            --bg-warm: #FFFBF7;
+            --bg-light: #FEF7F0;
+            --white: #ffffff;
+            --success-green: #10B981;
+            --gradient-warm: linear-gradient(135deg, #FF6B35 0%, #F4A261 50%, #2EC4B6 100%);
+            --gradient-hero: linear-gradient(135deg, #FF6B35 0%, #E55A2B 100%);
+        }
+        
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            overflow-x: hidden;
+            background: var(--white);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background: var(--white);
+            box-shadow: 0 2px 20px rgba(255, 107, 53, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            font-size: 1.75rem;
+            font-weight: 800;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .logo-text {
+            background: var(--gradient-warm);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .logo-icon {
+            font-size: 2rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-orange);
+            transition: width 0.3s;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary-orange);
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-dark);
+        }
+        
+        /* Hero Section */
+        .hero {
+            margin-top: 70px;
+            background: var(--gradient-hero);
+            color: var(--white);
+            padding: 100px 0 120px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="white" opacity="0.1"/><circle cx="80" cy="40" r="3" fill="white" opacity="0.08"/><circle cx="40" cy="70" r="2" fill="white" opacity="0.1"/><circle cx="90" cy="80" r="2" fill="white" opacity="0.06"/></svg>');
+            background-size: 100px 100px;
+        }
+        
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: var(--white);
+            border-radius: 50% 50% 0 0;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .hero-badge span {
+            background: var(--accent-gold);
+            color: var(--text-dark);
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            text-shadow: 0 2px 20px rgba(0,0,0,0.2);
+        }
+        
+        .hero h1 .highlight {
+            color: var(--accent-cream);
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero-tagline {
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: var(--white);
+            color: var(--primary-orange);
+        }
+        
+        .btn-primary:hover {
+            background: var(--accent-cream);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid var(--white);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+        }
+        
+        .btn-cta {
+            background: var(--secondary-teal);
+            color: var(--white);
+        }
+        
+        .btn-cta:hover {
+            background: var(--secondary-dark-teal);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(46, 196, 182, 0.4);
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 100px 0 80px;
+            background: var(--white);
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .section-label {
+            display: inline-block;
+            background: var(--bg-light);
+            color: var(--primary-orange);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .section-header h2 {
+            font-size: 2.75rem;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            font-weight: 800;
+        }
+        
+        .section-header p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature-card {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 2px solid var(--bg-light);
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-warm);
+            transform: scaleX(0);
+            transition: transform 0.4s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(255, 107, 53, 0.15);
+            border-color: var(--primary-orange);
+        }
+        
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--bg-light);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s;
+        }
+        
+        .feature-card:hover .feature-icon {
+            background: var(--primary-orange);
+            transform: scale(1.1) rotate(-5deg);
+        }
+        
+        .feature-card h3 {
+            font-size: 1.4rem;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        .feature-card p {
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+        
+        /* Two Column Sections */
+        .two-column {
+            padding: 100px 0;
+        }
+        
+        .two-column-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+        }
+        
+        .column-image {
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            position: relative;
+        }
+        
+        .column-image::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            width: 100px;
+            height: 100px;
+            background: var(--accent-gold);
+            border-radius: 50%;
+            opacity: 0.3;
+            z-index: -1;
+        }
+        
+        .column-image::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            right: -15px;
+            width: 80px;
+            height: 80px;
+            background: var(--secondary-teal);
+            border-radius: 50%;
+            opacity: 0.3;
+            z-index: -1;
+        }
+        
+        .column-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.5s;
+        }
+        
+        .column-image:hover img {
+            transform: scale(1.03);
+        }
+        
+        .column-text h2 {
+            font-size: 2.5rem;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+        
+        .column-text h2 .text-gradient {
+            background: var(--gradient-warm);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .column-text p {
+            font-size: 1.15rem;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+        
+        .column-text ul {
+            list-style: none;
+            margin: 2rem 0;
+        }
+        
+        .column-text li {
+            padding: 0.75rem 0;
+            padding-left: 2.5rem;
+            position: relative;
+            color: var(--text-medium);
+            font-size: 1.05rem;
+        }
+        
+        .column-text li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            width: 24px;
+            height: 24px;
+            background: var(--primary-orange);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .bg-warm {
+            background: var(--bg-warm);
+        }
+        
+        /* How It Works */
+        .how-it-works {
+            padding: 100px 0;
+            background: var(--white);
+        }
+        
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 4rem;
+            position: relative;
+        }
+        
+        .steps::before {
+            content: '';
+            position: absolute;
+            top: 45px;
+            left: 12%;
+            right: 12%;
+            height: 3px;
+            background: var(--bg-light);
+            z-index: 0;
+        }
+        
+        .step {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: var(--white);
+            border: 4px solid var(--primary-orange);
+            color: var(--primary-orange);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin: 0 auto 1.5rem;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.2);
+        }
+        
+        .step:hover .step-number {
+            background: var(--primary-orange);
+            color: var(--white);
+            transform: scale(1.1);
+        }
+        
+        .step h3 {
+            font-size: 1.2rem;
+            color: var(--text-dark);
+            margin-bottom: 0.75rem;
+            font-weight: 700;
+        }
+        
+        .step p {
+            color: var(--text-light);
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+        
+        /* Stats Section */
+        .stats {
+            padding: 80px 0;
+            background: var(--gradient-hero);
+            color: var(--white);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            text-align: center;
+        }
+        
+        .stat-item h3 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-item p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        /* Newsletter Section */
+        .newsletter {
+            padding: 100px 0;
+            background: var(--text-dark);
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .newsletter::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 500px;
+            height: 500px;
+            background: var(--primary-orange);
+            border-radius: 50%;
+            opacity: 0.1;
+        }
+        
+        .newsletter-content {
+            max-width: 650px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .newsletter h2 {
+            font-size: 2.75rem;
+            margin-bottom: 1rem;
+            font-weight: 800;
+        }
+        
+        .newsletter p {
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.85;
+            line-height: 1.7;
+        }
+        
+        .newsletter-form {
+            display: flex;
+            gap: 1rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .newsletter-form input {
+            flex: 1;
+            padding: 1.25rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-family: inherit;
+            background: var(--white);
+            color: var(--text-dark);
+        }
+        
+        .newsletter-form input::placeholder {
+            color: var(--text-light);
+        }
+        
+        .newsletter-form button {
+            padding: 1.25rem 2.5rem;
+            background: var(--primary-orange);
+            color: var(--white);
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+        
+        .newsletter-form button:hover {
+            background: var(--primary-dark-orange);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(255, 107, 53, 0.4);
+        }
+        
+        .form-message {
+            margin-top: 1.5rem;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            display: none;
+            font-weight: 500;
+        }
+        
+        .form-message.success {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid rgba(16, 185, 129, 0.5);
+            color: #6EE7B7;
+        }
+        
+        .form-message.error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.5);
+            color: #FCA5A5;
+        }
+        
+        /* Footer */
+        footer {
+            background: #0F0F1A;
+            color: var(--white);
+            padding: 4rem 0 2rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        
+        .footer-brand {
+            max-width: 300px;
+        }
+        
+        .footer-brand .logo {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-brand p {
+            color: rgba(255,255,255,0.7);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            background: var(--primary-orange);
+            transform: translateY(-3px);
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 1.5rem;
+            color: var(--white);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        
+        .footer-section ul {
+            list-style: none;
+        }
+        
+        .footer-section li {
+            margin-bottom: 0.75rem;
+        }
+        
+        .footer-section a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .footer-section a:hover {
+            color: var(--primary-orange);
+            padding-left: 5px;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.5);
+            font-size: 0.9rem;
+        }
+        
+        .footer-bottom a {
+            color: var(--primary-orange);
+            text-decoration: none;
+        }
+        
+        .footer-bottom a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .steps {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .steps::before {
+                display: none;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .section-header h2 {
+                font-size: 2rem;
+            }
+            
+            .two-column-content {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+            
+            .column-reverse {
+                direction: rtl;
+            }
+            
+            .column-reverse > * {
+                direction: ltr;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .newsletter-form {
+                flex-direction: column;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .stat-item h3 {
+                font-size: 2rem;
+            }
+            
+            .steps {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .footer-brand {
+                max-width: 100%;
+            }
+            
+            .social-links {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="#" class="logo">
+                <span class="logo-icon">🍳</span>
+                <span class="logo-text">AI Make Food</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#for-cooks">For Home Cooks</a></li>
+                <li><a href="#signup">Get Early Access</a></li>
+            </ul>
+            <button class="mobile-menu-btn">☰</button>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero-content">
+            <div class="hero-badge">
+                <span>NEW</span>
+                Powered by Gemini 3 AI
+            </div>
+            <h1>Your <span class="highlight">Intelligent</span> Sous Chef</h1>
+            <p class="hero-tagline">SEE. THINK. GUIDE. TASTE.</p>
+            <p>The AI-powered cooking assistant that scans your ingredients, suggests personalized recipes, and guides you through every step with real-time visual coaching.</p>
+            <div class="cta-buttons">
+                <a href="#signup" class="btn btn-primary" onclick="gtag('event', 'click', {'event_category': 'CTA', 'event_label': 'Hero Get Started'});">
+                    🚀 Get Early Access
+                </a>
+                <a href="#how-it-works" class="btn btn-secondary" onclick="gtag('event', 'click', {'event_category': 'CTA', 'event_label': 'Hero Learn More'});">
+                    See How It Works
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">✨ POWERFUL FEATURES</span>
+                <h2>Everything You Need to Cook with Confidence</h2>
+                <p>From pantry scanning to real-time guidance, we've got every step covered</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📸</div>
+                    <h3>Smart Ingredient Scanner</h3>
+                    <p>Point your camera at your fridge or pantry and our AI instantly identifies all your ingredients, quantities, and freshness levels.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <h3>AI Recipe Matching</h3>
+                    <p>Get personalized recipe suggestions based on what you have, your skill level, dietary preferences, and how much time you've got.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👀</div>
+                    <h3>Real-Time Visual Coaching</h3>
+                    <p>Live video analysis provides hands-free guidance while you cook. Get alerts for heat levels, doneness, and technique corrections.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🛒</div>
+                    <h3>Smart Shopping Lists</h3>
+                    <p>Auto-generate shopping lists for any recipe. Track what you have, what you need, and get suggestions for meal prep optimization.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⏱️</div>
+                    <h3>Parallel Task Management</h3>
+                    <p>Our marathon agent coordinates multiple cooking tasks simultaneously, managing timers and alerting you to the next step.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🥗</div>
+                    <h3>Nutrition Tracking</h3>
+                    <p>Automatic calorie and macro tracking for every meal. Get insights into your eating habits and healthier recipe alternatives.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- For Home Cooks Section -->
+    <section id="for-cooks" class="two-column bg-warm">
+        <div class="container">
+            <div class="two-column-content">
+                <div class="column-image">
+                    <img src="man-cooking.jpg" alt="Man cooking with AI guidance on his phone">
+                </div>
+                <div class="column-text">
+                    <h2>Cook Like a <span class="text-gradient">Professional Chef</span></h2>
+                    <p>Whether you're a complete beginner or an experienced home cook, AIMakeFood adapts to your skill level and helps you create restaurant-quality meals at home.</p>
+                    <ul>
+                        <li>Scan your fridge and get instant recipe ideas</li>
+                        <li>Step-by-step voice guidance while you cook</li>
+                        <li>Real-time safety alerts (pan smoking, food burning)</li>
+                        <li>Learn proper techniques with visual demonstrations</li>
+                        <li>Save favorite recipes and track your cooking history</li>
+                        <li>Reduce food waste by using what you already have</li>
+                        <li>Accommodate any dietary restrictions or allergies</li>
+                    </ul>
+                    <a href="#signup" class="btn btn-cta" onclick="gtag('event', 'click', {'event_category': 'CTA', 'event_label': 'Cook Section Signup'});">Start Cooking Smarter →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="two-column">
+        <div class="container">
+            <div class="two-column-content column-reverse">
+                <div class="column-text">
+                    <h2>Save Time, <span class="text-gradient">Reduce Waste</span>, Eat Better</h2>
+                    <p>AIMakeFood isn't just about cooking—it's about transforming your entire relationship with food. Plan better, shop smarter, and never wonder "what's for dinner?" again.</p>
+                    <ul>
+                        <li>Save 12+ minutes per meal with AI task coordination</li>
+                        <li>Reduce food waste by up to 35% with smart inventory tracking</li>
+                        <li>Cut grocery costs with meal planning optimization</li>
+                        <li>Learn new cuisines and cooking techniques effortlessly</li>
+                        <li>Build confidence with positive reinforcement and tips</li>
+                        <li>Family-friendly mode for cooking with kids</li>
+                        <li>Sync across all your devices seamlessly</li>
+                    </ul>
+                    <a href="#signup" class="btn btn-cta" onclick="gtag('event', 'click', {'event_category': 'CTA', 'event_label': 'Benefits Section Signup'});">Join the Waitlist →</a>
+                </div>
+                <div class="column-image">
+                    <img src="woman-cooking.jpg" alt="Woman using AI cooking assistant">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">🎯 SIMPLE PROCESS</span>
+                <h2>How AI Make Food Works</h2>
+                <p>From scanning to serving in four simple steps</p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Scan Your Ingredients</h3>
+                    <p>Open the app and point your camera at your fridge, pantry, or groceries. AI identifies everything instantly.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Get Recipe Matches</h3>
+                    <p>Receive personalized recipe suggestions ranked by ingredient match, difficulty, time, and your preferences.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Cook with AI Guidance</h3>
+                    <p>Follow step-by-step instructions with real-time video analysis, voice prompts, and smart timer management.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Enjoy & Improve</h3>
+                    <p>Rate your meal, save favorites, and watch your cooking skills improve over time with personalized insights.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h3>35%</h3>
+                    <p>Less Food Waste</p>
+                </div>
+                <div class="stat-item">
+                    <h3>12min</h3>
+                    <p>Saved Per Meal</p>
+                </div>
+                <div class="stat-item">
+                    <h3>10K+</h3>
+                    <p>Recipes Available</p>
+                </div>
+                <div class="stat-item">
+                    <h3>99%</h3>
+                    <p>Ingredient Accuracy</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter/Signup Section -->
+    <section id="signup" class="newsletter">
+        <div class="container newsletter-content">
+            <h2>🍳 Be the First to Cook Smarter</h2>
+            <p>AI Make Food is launching soon! Join our waitlist to get early access, exclusive features, and be notified when we're ready to transform your kitchen.</p>
+            <form class="newsletter-form" id="signupForm">
+                <input type="email" id="emailInput" placeholder="Enter your email address" required>
+                <button type="submit">Get Early Access</button>
+            </form>
+            <div class="form-message" id="formMessage"></div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="#" class="logo">
+                        <span class="logo-icon">🍳</span>
+                        <span class="logo-text">AI Make Food</span>
+                    </a>
+                    <p>Your intelligent sous chef that sees, thinks, and guides you from pantry to plate. Powered by Gemini 3 AI.</p>
+                    <div class="social-links">
+                        <a href="https://x.com/AIMakeFood" aria-label="Twitter">𝕏</a>
+                        <a href="https://instagram.com/AIMakeFoodCom" aria-label="Instagram">📷</a>
+                        <a href="https://www.tiktok.com/@aimakefood" aria-label="TikTok">🎵</a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Features</h3>
+                    <ul>
+                        <li><a href="#features">Ingredient Scanner</a></li>
+                        <li><a href="#features">Recipe Matching</a></li>
+                        <li><a href="#features">Visual Coaching</a></li>
+                        <li><a href="#features">Shopping Lists</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="#">Recipe Blog</a></li>
+                        <li><a href="#">Cooking Tips</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 AI Make Food. All rights reserved. | <a href="privacy.html">Privacy</a> | <a href="terms.html">Terms</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Supabase Integration Script -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Initialize Supabase - Replace with your actual credentials
+        var SUPABASE_URL = 'https://xhswiizneqphltobsxkw.supabase.co';
+        var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhoc3dpaXpuZXFwaGx0b2JzeGt3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcxNzI5NTEsImV4cCI6MjA3Mjc0ODk1MX0.HiZZ1RTSqOf0dbc9xBbmWGaaEKaI1bM3GtCxOcdMABI';
+        
+        var db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+            auth: {
+                autoRefreshToken: false,
+                persistSession: false
+            }
+        });
+        
+        // Handle form submission
+        document.getElementById('signupForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            var email = document.getElementById('emailInput').value.toLowerCase().trim();
+            var messageDiv = document.getElementById('formMessage');
+            var submitButton = this.querySelector('button');
+            
+            submitButton.disabled = true;
+            submitButton.textContent = 'Joining...';
+            messageDiv.style.display = 'none';
+            
+            try {
+                gtag('event', 'signup', {
+                    'event_category': 'Form',
+                    'event_label': 'Waitlist Email Submission'
+                });
+                
+                var { data, error } = await db
+                    .from('aimakefood_waitlist')
+                    .insert([{ 
+                        email: email,
+                        source: 'landing_page',
+                        referrer: document.referrer || 'direct'
+                    }])
+                    .select();
+                
+                if (error) {
+                    if (error.code === '23505' || error.message.includes('duplicate')) {
+                        messageDiv.className = 'form-message success';
+                        messageDiv.textContent = "🎉 You're already on our waitlist! We'll notify you when we launch.";
+                        document.getElementById('emailInput').value = '';
+                    } else {
+                        throw error;
+                    }
+                } else {
+                    messageDiv.className = 'form-message success';
+                    messageDiv.textContent = "🎉 Success! You're on the list. We'll email you when AI Make Food is ready.";
+                    document.getElementById('emailInput').value = '';
+                    
+                    gtag('event', 'conversion', {
+                        'event_category': 'Conversion',
+                        'event_label': 'Waitlist Signup Success'
+                    });
+                }
+                
+                messageDiv.style.display = 'block';
+                
+            } catch (error) {
+                console.error('Error:', error);
+                messageDiv.className = 'form-message error';
+                messageDiv.textContent = '⚠️ Something went wrong. Please try again.';
+                messageDiv.style.display = 'block';
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Get Early Access';
+            }
+        });
+        
+        // Track page view
+        gtag('event', 'page_view', {
+            'page_title': 'AI Make Food Landing Page',
+            'page_location': window.location.href
+        });
+        
+        // Track scroll depth
+        let scrollTracked = {25: false, 50: false, 75: false, 100: false};
+        window.addEventListener('scroll', function() {
+            var scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            
+            Object.keys(scrollTracked).forEach(depth => {
+                if (scrollPercent >= depth && !scrollTracked[depth]) {
+                    scrollTracked[depth] = true;
+                    gtag('event', 'scroll', {
+                        'event_category': 'Engagement',
+                        'event_label': 'Scroll Depth ' + depth + '%'
+                    });
+                }
+            });
+        });
+        
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
