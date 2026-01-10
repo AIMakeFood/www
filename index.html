@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Make Food - Your Intelligent Sous Chef | See. Think. Guide. Taste.</title>
     <meta name="description" content="The AI-powered cooking assistant that scans your ingredients, suggests recipes, and guides you through every step with real-time visual coaching. Cook smarter, eat better.">
-    <meta name="keywords" content="AI cooking, recipe app, meal planning, cooking assistant, smart kitchen, ingredient scanner, cooking guidance">
+    <meta name="keywords" content="AI cooking, recipe app, meal planning, cooking assistant, smart kitchen, ingredient scanner, cooking guidance, Gemini 3, autonomous cooking">
     
     <!-- Open Graph -->
     <meta property="og:title" content="AI Make Food - Your Intelligent Sous Chef">
@@ -18,15 +18,17 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="AI Make Food - Your Intelligent Sous Chef">
     <meta name="twitter:description" content="Real-time AI cooking guidance from pantry to plate.">
+    <meta name="twitter:image" content="og-image.jpg">
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
+    <!-- External Assets -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
     <script>
@@ -35,1120 +37,530 @@
         gtag('js', new Date());
         gtag('config', 'G-XXXXXXXXXX');
     </script>
-    
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-orange': '#FF6B35',
+                        'brand-orange-dark': '#E55A2B',
+                        'brand-teal': '#2EC4B6',
+                        'brand-gold': '#F4A261',
+                        'brand-dark': '#050505',
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        :root {
-            --primary-orange: #FF6B35;
-            --primary-dark-orange: #E55A2B;
-            --secondary-teal: #2EC4B6;
-            --secondary-dark-teal: #25A89C;
-            --accent-gold: #F4A261;
-            --accent-cream: #FFF8F0;
-            --text-dark: #1A1A2E;
-            --text-medium: #3D3D5C;
-            --text-light: #6B7280;
-            --bg-warm: #FFFBF7;
-            --bg-light: #FEF7F0;
-            --white: #ffffff;
-            --success-green: #10B981;
-            --gradient-warm: linear-gradient(135deg, #FF6B35 0%, #F4A261 50%, #2EC4B6 100%);
-            --gradient-hero: linear-gradient(135deg, #FF6B35 0%, #E55A2B 100%);
-        }
-        
         body {
-            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            line-height: 1.6;
-            color: var(--text-dark);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #050505;
+            color: #ffffff;
             overflow-x: hidden;
-            background: var(--white);
         }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
+
+        /* Video Background */
+        .video-docker video {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: cover;
         }
-        
-        /* Header */
-        header {
-            background: var(--white);
-            box-shadow: 0 2px 20px rgba(255, 107, 53, 0.1);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-            background: rgba(255, 255, 255, 0.95);
+
+        .video-overlay {
+            background: linear-gradient(0deg, rgba(5,5,5,1) 0%, rgba(5,5,5,0.4) 50%, rgba(5,5,5,0.8) 100%);
         }
-        
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
+
+        /* Glassmorphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
-        
-        .logo {
-            font-size: 1.75rem;
-            font-weight: 800;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+
+        .glass-light {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
-        .logo-text {
-            background: var(--gradient-warm);
+
+        /* Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .orange-glow {
+            box-shadow: 0 0 60px rgba(255, 107, 53, 0.2);
+        }
+
+        .teal-glow {
+            box-shadow: 0 0 40px rgba(46, 196, 182, 0.15);
+        }
+
+        .text-gradient {
+            background: linear-gradient(to right, #ffffff, #FF6B35);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
-        
-        .logo-icon {
-            font-size: 2rem;
+
+        .text-gradient-teal {
+            background: linear-gradient(to right, #ffffff, #2EC4B6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
-        }
-        
-        .nav-links a {
-            color: var(--text-dark);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-            position: relative;
-        }
-        
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--primary-orange);
-            transition: width 0.3s;
-        }
-        
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-        
-        .nav-links a:hover {
-            color: var(--primary-orange);
-        }
-        
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--text-dark);
-        }
-        
-        /* Hero Section */
-        .hero {
-            margin-top: 70px;
-            background: var(--gradient-hero);
-            color: var(--white);
-            padding: 100px 0 120px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="white" opacity="0.1"/><circle cx="80" cy="40" r="3" fill="white" opacity="0.08"/><circle cx="40" cy="70" r="2" fill="white" opacity="0.1"/><circle cx="90" cy="80" r="2" fill="white" opacity="0.06"/></svg>');
-            background-size: 100px 100px;
-        }
-        
-        .hero::after {
-            content: '';
-            position: absolute;
-            bottom: -50px;
-            left: 0;
-            right: 0;
-            height: 100px;
-            background: var(--white);
-            border-radius: 50% 50% 0 0;
-        }
-        
-        .hero-content {
-            position: relative;
-            z-index: 1;
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-        }
-        
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            font-size: 0.9rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .hero-badge span {
-            background: var(--accent-gold);
-            color: var(--text-dark);
-            padding: 0.2rem 0.5rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-        
-        .hero h1 {
-            font-size: 3.5rem;
-            font-weight: 900;
-            margin-bottom: 1.5rem;
-            line-height: 1.1;
-            text-shadow: 0 2px 20px rgba(0,0,0,0.2);
-        }
-        
-        .hero h1 .highlight {
-            color: var(--accent-cream);
-        }
-        
-        .hero p {
-            font-size: 1.3rem;
-            margin-bottom: 2rem;
-            opacity: 0.95;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .hero-tagline {
-            font-size: 1.1rem;
-            font-weight: 600;
-            letter-spacing: 2px;
-            margin-bottom: 2.5rem;
-            opacity: 0.9;
-        }
-        
-        .cta-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        
-        .btn {
-            padding: 1rem 2.5rem;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .btn-primary {
-            background: var(--white);
-            color: var(--primary-orange);
-        }
-        
-        .btn-primary:hover {
-            background: var(--accent-cream);
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-        }
-        
-        .btn-secondary {
-            background: transparent;
-            color: var(--white);
-            border: 2px solid var(--white);
-        }
-        
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-3px);
-        }
-        
-        .btn-cta {
-            background: var(--secondary-teal);
-            color: var(--white);
-        }
-        
-        .btn-cta:hover {
-            background: var(--secondary-dark-teal);
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(46, 196, 182, 0.4);
-        }
-        
-        /* Features Section */
-        .features {
-            padding: 100px 0 80px;
-            background: var(--white);
-        }
-        
-        .section-header {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-        
-        .section-label {
-            display: inline-block;
-            background: var(--bg-light);
-            color: var(--primary-orange);
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-        
-        .section-header h2 {
-            font-size: 2.75rem;
-            color: var(--text-dark);
-            margin-bottom: 1rem;
-            font-weight: 800;
-        }
-        
-        .section-header p {
-            font-size: 1.2rem;
-            color: var(--text-light);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
-        }
-        
+
+        /* Feature Card Hover */
         .feature-card {
-            background: var(--white);
-            padding: 2.5rem;
-            border-radius: 20px;
-            border: 2px solid var(--bg-light);
-            transition: all 0.4s;
-            position: relative;
-            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
         }
-        
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--gradient-warm);
-            transform: scaleX(0);
-            transition: transform 0.4s;
-        }
-        
+
         .feature-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(255, 107, 53, 0.15);
-            border-color: var(--primary-orange);
+            border-color: rgba(255, 107, 53, 0.5);
         }
-        
-        .feature-card:hover::before {
-            transform: scaleX(1);
-        }
-        
-        .feature-icon {
-            width: 70px;
-            height: 70px;
-            background: var(--bg-light);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-            transition: all 0.3s;
-        }
-        
+
         .feature-card:hover .feature-icon {
-            background: var(--primary-orange);
-            transform: scale(1.1) rotate(-5deg);
+            transform: scale(1.1);
+            background: rgba(255, 107, 53, 0.2);
         }
-        
-        .feature-card h3 {
-            font-size: 1.4rem;
-            color: var(--text-dark);
-            margin-bottom: 1rem;
-            font-weight: 700;
+
+        .feature-icon {
+            transition: all 0.3s ease;
         }
-        
-        .feature-card p {
-            color: var(--text-light);
-            line-height: 1.8;
-        }
-        
-        /* Two Column Sections */
-        .two-column {
-            padding: 100px 0;
-        }
-        
-        .two-column-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 5rem;
-            align-items: center;
-        }
-        
-        .column-image {
-            border-radius: 24px;
-            overflow: hidden;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
-            position: relative;
-        }
-        
-        .column-image::before {
-            content: '';
-            position: absolute;
-            top: -20px;
-            left: -20px;
-            width: 100px;
-            height: 100px;
-            background: var(--accent-gold);
-            border-radius: 50%;
-            opacity: 0.3;
-            z-index: -1;
-        }
-        
-        .column-image::after {
-            content: '';
-            position: absolute;
-            bottom: -15px;
-            right: -15px;
-            width: 80px;
-            height: 80px;
-            background: var(--secondary-teal);
-            border-radius: 50%;
-            opacity: 0.3;
-            z-index: -1;
-        }
-        
-        .column-image img {
-            width: 100%;
-            height: auto;
-            display: block;
-            transition: transform 0.5s;
-        }
-        
-        .column-image:hover img {
-            transform: scale(1.03);
-        }
-        
-        .column-text h2 {
-            font-size: 2.5rem;
-            color: var(--text-dark);
-            margin-bottom: 1.5rem;
-            font-weight: 800;
-            line-height: 1.2;
-        }
-        
-        .column-text h2 .text-gradient {
-            background: var(--gradient-warm);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .column-text p {
-            font-size: 1.15rem;
-            color: var(--text-light);
-            margin-bottom: 1.5rem;
-            line-height: 1.8;
-        }
-        
-        .column-text ul {
-            list-style: none;
-            margin: 2rem 0;
-        }
-        
-        .column-text li {
-            padding: 0.75rem 0;
-            padding-left: 2.5rem;
-            position: relative;
-            color: var(--text-medium);
-            font-size: 1.05rem;
-        }
-        
-        .column-text li::before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            width: 24px;
-            height: 24px;
-            background: var(--primary-orange);
-            color: var(--white);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
-        
-        .bg-warm {
-            background: var(--bg-warm);
-        }
-        
-        /* How It Works */
-        .how-it-works {
-            padding: 100px 0;
-            background: var(--white);
-        }
-        
-        .steps {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 2rem;
-            margin-top: 4rem;
-            position: relative;
-        }
-        
-        .steps::before {
-            content: '';
-            position: absolute;
-            top: 45px;
-            left: 12%;
-            right: 12%;
-            height: 3px;
-            background: var(--bg-light);
-            z-index: 0;
-        }
-        
-        .step {
-            text-align: center;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .step-number {
-            width: 80px;
-            height: 80px;
-            background: var(--white);
-            border: 4px solid var(--primary-orange);
-            color: var(--primary-orange);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.75rem;
-            font-weight: 800;
-            margin: 0 auto 1.5rem;
-            transition: all 0.3s;
-            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.2);
-        }
-        
-        .step:hover .step-number {
-            background: var(--primary-orange);
-            color: var(--white);
+
+        /* Step Number Animation */
+        .step-card:hover .step-number {
+            background: #FF6B35;
+            color: white;
             transform: scale(1.1);
         }
-        
-        .step h3 {
-            font-size: 1.2rem;
-            color: var(--text-dark);
-            margin-bottom: 0.75rem;
-            font-weight: 700;
+
+        .step-number {
+            transition: all 0.3s ease;
         }
-        
-        .step p {
-            color: var(--text-light);
-            line-height: 1.7;
-            font-size: 0.95rem;
-        }
-        
-        /* Stats Section */
-        .stats {
-            padding: 80px 0;
-            background: var(--gradient-hero);
-            color: var(--white);
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 2rem;
-            text-align: center;
-        }
-        
-        .stat-item h3 {
-            font-size: 3rem;
-            font-weight: 800;
-            margin-bottom: 0.5rem;
-        }
-        
-        .stat-item p {
-            font-size: 1rem;
-            opacity: 0.9;
-        }
-        
-        /* Newsletter Section */
-        .newsletter {
-            padding: 100px 0;
-            background: var(--text-dark);
-            color: var(--white);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .newsletter::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -20%;
-            width: 500px;
-            height: 500px;
-            background: var(--primary-orange);
-            border-radius: 50%;
-            opacity: 0.1;
-        }
-        
-        .newsletter-content {
-            max-width: 650px;
-            margin: 0 auto;
-            text-align: center;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .newsletter h2 {
-            font-size: 2.75rem;
-            margin-bottom: 1rem;
-            font-weight: 800;
-        }
-        
-        .newsletter p {
-            font-size: 1.2rem;
-            margin-bottom: 2.5rem;
-            opacity: 0.85;
-            line-height: 1.7;
-        }
-        
-        .newsletter-form {
-            display: flex;
-            gap: 1rem;
-            max-width: 500px;
-            margin: 0 auto;
-        }
-        
-        .newsletter-form input {
-            flex: 1;
-            padding: 1.25rem 1.5rem;
-            border: none;
-            border-radius: 50px;
-            font-size: 1rem;
-            font-family: inherit;
-            background: var(--white);
-            color: var(--text-dark);
-        }
-        
-        .newsletter-form input::placeholder {
-            color: var(--text-light);
-        }
-        
-        .newsletter-form button {
-            padding: 1.25rem 2.5rem;
-            background: var(--primary-orange);
-            color: var(--white);
-            border: none;
-            border-radius: 50px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: inherit;
-            white-space: nowrap;
-        }
-        
-        .newsletter-form button:hover {
-            background: var(--primary-dark-orange);
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(255, 107, 53, 0.4);
-        }
-        
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #FF6B35; }
+
+        /* Form Message */
         .form-message {
-            margin-top: 1.5rem;
-            padding: 1rem 1.5rem;
-            border-radius: 12px;
             display: none;
-            font-weight: 500;
         }
-        
-        .form-message.success {
-            background: rgba(16, 185, 129, 0.2);
-            border: 1px solid rgba(16, 185, 129, 0.5);
-            color: #6EE7B7;
-        }
-        
-        .form-message.error {
-            background: rgba(239, 68, 68, 0.2);
-            border: 1px solid rgba(239, 68, 68, 0.5);
-            color: #FCA5A5;
-        }
-        
-        /* Footer */
-        footer {
-            background: #0F0F1A;
-            color: var(--white);
-            padding: 4rem 0 2rem;
-        }
-        
-        .footer-content {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 3rem;
-            margin-bottom: 3rem;
-        }
-        
-        .footer-brand {
-            max-width: 300px;
-        }
-        
-        .footer-brand .logo {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-        
-        .footer-brand p {
-            color: rgba(255,255,255,0.7);
-            line-height: 1.8;
-            margin-bottom: 1.5rem;
-        }
-        
-        .social-links {
-            display: flex;
-            gap: 1rem;
-        }
-        
-        .social-links a {
-            width: 40px;
-            height: 40px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--white);
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-        
-        .social-links a:hover {
-            background: var(--primary-orange);
-            transform: translateY(-3px);
-        }
-        
-        .footer-section h3 {
-            margin-bottom: 1.5rem;
-            color: var(--white);
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-        
-        .footer-section ul {
-            list-style: none;
-        }
-        
-        .footer-section li {
-            margin-bottom: 0.75rem;
-        }
-        
-        .footer-section a {
-            color: rgba(255,255,255,0.7);
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-        
-        .footer-section a:hover {
-            color: var(--primary-orange);
-            padding-left: 5px;
-        }
-        
-        .footer-bottom {
-            text-align: center;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            color: rgba(255,255,255,0.5);
-            font-size: 0.9rem;
-        }
-        
-        .footer-bottom a {
-            color: var(--primary-orange);
-            text-decoration: none;
-        }
-        
-        .footer-bottom a:hover {
-            text-decoration: underline;
-        }
-        
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .steps {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .steps::before {
-                display: none;
-            }
-            
-            .footer-content {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-            
-            .hero p {
-                font-size: 1.1rem;
-            }
-            
-            .section-header h2 {
-                font-size: 2rem;
-            }
-            
-            .two-column-content {
-                grid-template-columns: 1fr;
-                gap: 3rem;
-            }
-            
-            .column-reverse {
-                direction: rtl;
-            }
-            
-            .column-reverse > * {
-                direction: ltr;
-            }
-            
-            .nav-links {
-                display: none;
-            }
-            
-            .mobile-menu-btn {
-                display: block;
-            }
-            
-            .newsletter-form {
-                flex-direction: column;
-            }
-            
-            .stats-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            
-            .stat-item h3 {
-                font-size: 2rem;
-            }
-            
-            .steps {
-                grid-template-columns: 1fr;
-                gap: 3rem;
-            }
-            
-            .footer-content {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-            
-            .footer-brand {
-                max-width: 100%;
-            }
-            
-            .social-links {
-                justify-content: center;
-            }
+        .form-message.show {
+            display: block;
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <nav>
-            <a href="#" class="logo">
-                <span class="logo-icon">🍳</span>
-                <span class="logo-text">AI Make Food</span>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 transition-all duration-300 px-4 md:px-6 py-4" id="navbar">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="#" class="flex items-center gap-2 text-xl md:text-2xl font-black tracking-tighter">
+                <span class="text-2xl md:text-3xl">🍳</span>
+                <span class="hidden sm:block">AIMakeFood</span>
             </a>
-            <ul class="nav-links">
-                <li><a href="#features">Features</a></li>
-                <li><a href="#how-it-works">How It Works</a></li>
-                <li><a href="#for-cooks">For Home Cooks</a></li>
-                <li><a href="#signup">Get Early Access</a></li>
-            </ul>
-            <button class="mobile-menu-btn">☰</button>
-        </nav>
-    </header>
+            
+            <div class="hidden lg:flex items-center gap-8 text-sm font-semibold text-gray-400">
+                <a href="#vision" class="hover:text-white transition-colors">Vision</a>
+                <a href="#features" class="hover:text-white transition-colors">Features</a>
+                <a href="#how-it-works" class="hover:text-white transition-colors">How It Works</a>
+                <a href="#safety" class="hover:text-white transition-colors">Safety</a>
+            </div>
+
+            <a href="#waitlist" class="bg-white text-black px-4 md:px-6 py-2 md:py-2.5 rounded-full text-sm font-bold hover:bg-brand-orange hover:text-white transition-all transform hover:scale-105"
+               onclick="gtag('event', 'click', {'event_category': 'CTA', 'event_label': 'Nav Waitlist'});">
+                Join Waitlist
+            </a>
+        </div>
+    </nav>
 
     <!-- Hero Section -->
-    <section class="hero">
-        <div class="container hero-content">
-            <div class="hero-badge">
-                <span>NEW</span>
-                Powered by Gemini 3 AI
+    <section class="relative h-screen flex items-center justify-center overflow-hidden">
+        <div class="video-docker absolute inset-0 z-0">
+            <video autoplay muted loop playsinline poster="https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg">
+                <source src="https://player.vimeo.com/external/494163967.sd.mp4?s=548c26d471e84762c431412530ba025a17697420&profile_id=164&oauth2_token_id=57447761" type="video/mp4">
+            </video>
+        </div>
+        <div class="video-overlay absolute inset-0 z-10"></div>
+
+        <div class="relative z-20 text-center px-4 md:px-6 max-w-5xl">
+            <div class="reveal inline-flex items-center gap-2 glass px-4 py-2 rounded-full text-xs font-bold tracking-widest text-brand-orange mb-6 md:mb-8 uppercase">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-orange opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-orange"></span>
+                </span>
+                Powered by Gemini 3 Multimodal
             </div>
-            <h1>Your <span class="highlight">Intelligent</span> Sous Chef</h1>
-            <p class="hero-tagline">SEE. THINK. GUIDE. TASTE.</p>
-            <p>The AI-powered cooking assistant that scans your ingredients, suggests personalized recipes, and guides you through every step with real-time visual coaching.</p>
-            <div class="cta-buttons">
-                <a href="#signup" class="btn btn-primary" onclick="gtag('event', 'click', {'event_category': 'CTA', 'event_label': 'Hero Get Started'});">
-                    🚀 Get Early Access
+            <h1 class="reveal text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-tight mb-6 md:mb-8">
+                The AI Sous Chef <br> <span class="text-gradient">With Real Eyes.</span>
+            </h1>
+            <p class="reveal text-base md:text-xl text-gray-400 max-w-2xl mx-auto mb-4">
+                <span class="text-white font-semibold tracking-wider">SEE. THINK. GUIDE. TASTE.</span>
+            </p>
+            <p class="reveal text-base md:text-lg text-gray-500 max-w-2xl mx-auto mb-8 md:mb-12">
+                Stop following static recipes. Experience the first autonomous kitchen companion that sees your ingredients and coaches your technique in real-time.
+            </p>
+            <div class="reveal flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="#waitlist" class="w-full sm:w-auto bg-brand-orange text-white px-8 md:px-10 py-4 md:py-5 rounded-full font-bold text-base md:text-lg orange-glow hover:scale-105 transition-transform"
+                   onclick="gtag('event', 'click', {'event_category': 'CTA', 'event_label': 'Hero Reserve Access'});">
+                    🚀 Reserve Early Access
                 </a>
-                <a href="#how-it-works" class="btn btn-secondary" onclick="gtag('event', 'click', {'event_category': 'CTA', 'event_label': 'Hero Learn More'});">
+                <a href="#how-it-works" class="w-full sm:w-auto glass text-white px-8 md:px-10 py-4 md:py-5 rounded-full font-bold text-base md:text-lg hover:bg-white/10 transition-all"
+                   onclick="gtag('event', 'click', {'event_category': 'CTA', 'event_label': 'Hero Learn More'});">
                     See How It Works
                 </a>
             </div>
         </div>
+
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 animate-bounce">
+            <i data-lucide="chevron-down" class="w-8 h-8 text-gray-500"></i>
+        </div>
     </section>
 
-    <!-- Features Section -->
-    <section id="features" class="features">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-label">✨ POWERFUL FEATURES</span>
-                <h2>Everything You Need to Cook with Confidence</h2>
-                <p>From pantry scanning to real-time guidance, we've got every step covered</p>
+    <!-- Vision Section -->
+    <section id="vision" class="py-20 md:py-32 px-4 md:px-6 relative">
+        <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 md:gap-16 items-center">
+            <div class="reveal">
+                <span class="inline-block glass text-brand-orange px-4 py-2 rounded-full text-xs font-bold tracking-widest uppercase mb-6">
+                    ✨ Our Vision
+                </span>
+                <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter mb-6 md:mb-8 leading-tight">
+                    Beyond Smart. <br> <span class="text-brand-orange">Truly Autonomous.</span>
+                </h2>
+                <div class="space-y-6 md:space-y-8 text-gray-400 text-base md:text-lg">
+                    <p>While standard apps give you a list of instructions, AIMakeFood integrates into your actual workflow. Using low-latency computer vision, we turn your device into a high-fidelity kitchen sensor.</p>
+                    <div class="flex items-start gap-4">
+                        <div class="p-3 bg-white/5 rounded-xl text-brand-orange shrink-0"><i data-lucide="scan" class="w-6 h-6"></i></div>
+                        <div>
+                            <h4 class="text-white font-bold mb-1">Pantry Awareness</h4>
+                            <p class="text-sm md:text-base">Identify 100+ ingredients instantly just by pointing your camera.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="p-3 bg-white/5 rounded-xl text-brand-orange shrink-0"><i data-lucide="eye" class="w-6 h-6"></i></div>
+                        <div>
+                            <h4 class="text-white font-bold mb-1">Technique Monitoring</h4>
+                            <p class="text-sm md:text-base">AI monitors your knife grip and stove heat to ensure perfect execution.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="p-3 bg-white/5 rounded-xl text-brand-orange shrink-0"><i data-lucide="brain" class="w-6 h-6"></i></div>
+                        <div>
+                            <h4 class="text-white font-bold mb-1">Predictive Guidance</h4>
+                            <p class="text-sm md:text-base">Anticipates your next move and offers proactive coaching before mistakes happen.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">📸</div>
-                    <h3>Smart Ingredient Scanner</h3>
-                    <p>Point your camera at your fridge or pantry and our AI instantly identifies all your ingredients, quantities, and freshness levels.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🧠</div>
-                    <h3>AI Recipe Matching</h3>
-                    <p>Get personalized recipe suggestions based on what you have, your skill level, dietary preferences, and how much time you've got.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">👀</div>
-                    <h3>Real-Time Visual Coaching</h3>
-                    <p>Live video analysis provides hands-free guidance while you cook. Get alerts for heat levels, doneness, and technique corrections.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🛒</div>
-                    <h3>Smart Shopping Lists</h3>
-                    <p>Auto-generate shopping lists for any recipe. Track what you have, what you need, and get suggestions for meal prep optimization.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">⏱️</div>
-                    <h3>Parallel Task Management</h3>
-                    <p>Our marathon agent coordinates multiple cooking tasks simultaneously, managing timers and alerting you to the next step.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🥗</div>
-                    <h3>Nutrition Tracking</h3>
-                    <p>Automatic calorie and macro tracking for every meal. Get insights into your eating habits and healthier recipe alternatives.</p>
+            <div class="reveal relative">
+                <div class="orange-glow rounded-[32px] md:rounded-[40px] overflow-hidden glass p-3 md:p-4">
+                    <img src="photo-1556910103-1c02745aae4d.jpeg" class="rounded-[24px] md:rounded-[32px] w-full" alt="AI Vision Demo">
+                    <!-- Overlay markers mimicking app UI -->
+                    <div class="absolute top-8 md:top-12 left-6 md:left-12 glass px-2 md:px-3 py-1 rounded-full text-[8px] md:text-[10px] font-bold text-brand-teal border-brand-teal/50">✓ ONION DETECTED</div>
+                    <div class="absolute top-16 md:top-24 right-6 md:right-12 glass px-2 md:px-3 py-1 rounded-full text-[8px] md:text-[10px] font-bold text-brand-teal border-brand-teal/50">✓ GARLIC DETECTED</div>
+                    <div class="absolute bottom-16 md:bottom-20 right-8 md:right-20 bg-red-500/90 text-white px-2 md:px-3 py-1 rounded-full text-[8px] md:text-[10px] font-bold animate-pulse">⚠️ PAN TOO HOT</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- For Home Cooks Section -->
-    <section id="for-cooks" class="two-column bg-warm">
-        <div class="container">
-            <div class="two-column-content">
-                <div class="column-image">
-                    <img src="man-cooking.jpg" alt="Man cooking with AI guidance on his phone">
-                </div>
-                <div class="column-text">
-                    <h2>Cook Like a <span class="text-gradient">Professional Chef</span></h2>
-                    <p>Whether you're a complete beginner or an experienced home cook, AIMakeFood adapts to your skill level and helps you create restaurant-quality meals at home.</p>
-                    <ul>
-                        <li>Scan your fridge and get instant recipe ideas</li>
-                        <li>Step-by-step voice guidance while you cook</li>
-                        <li>Real-time safety alerts (pan smoking, food burning)</li>
-                        <li>Learn proper techniques with visual demonstrations</li>
-                        <li>Save favorite recipes and track your cooking history</li>
-                        <li>Reduce food waste by using what you already have</li>
-                        <li>Accommodate any dietary restrictions or allergies</li>
-                    </ul>
-                    <a href="#signup" class="btn btn-cta" onclick="gtag('event', 'click', {'event_category': 'CTA', 'event_label': 'Cook Section Signup'});">Start Cooking Smarter →</a>
-                </div>
+    <!-- Features Grid -->
+    <section id="features" class="py-20 md:py-32 px-4 md:px-6 bg-[#080808]">
+        <div class="max-w-7xl mx-auto">
+            <div class="reveal text-center mb-12 md:mb-20">
+                <span class="inline-block glass text-brand-orange px-4 py-2 rounded-full text-xs font-bold tracking-widest uppercase mb-6">
+                    ✨ Powerful Features
+                </span>
+                <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter mb-4">Everything You Need to Cook</h2>
+                <p class="text-gray-500 text-base md:text-lg max-w-2xl mx-auto">From pantry scanning to real-time guidance, we've got every step covered.</p>
             </div>
-        </div>
-    </section>
-
-    <!-- Benefits Section -->
-    <section class="two-column">
-        <div class="container">
-            <div class="two-column-content column-reverse">
-                <div class="column-text">
-                    <h2>Save Time, <span class="text-gradient">Reduce Waste</span>, Eat Better</h2>
-                    <p>AIMakeFood isn't just about cooking—it's about transforming your entire relationship with food. Plan better, shop smarter, and never wonder "what's for dinner?" again.</p>
-                    <ul>
-                        <li>Save 12+ minutes per meal with AI task coordination</li>
-                        <li>Reduce food waste by up to 35% with smart inventory tracking</li>
-                        <li>Cut grocery costs with meal planning optimization</li>
-                        <li>Learn new cuisines and cooking techniques effortlessly</li>
-                        <li>Build confidence with positive reinforcement and tips</li>
-                        <li>Family-friendly mode for cooking with kids</li>
-                        <li>Sync across all your devices seamlessly</li>
-                    </ul>
-                    <a href="#signup" class="btn btn-cta" onclick="gtag('event', 'click', {'event_category': 'CTA', 'event_label': 'Benefits Section Signup'});">Join the Waitlist →</a>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                <!-- Feature 1 -->
+                <div class="reveal feature-card glass p-6 md:p-10 rounded-[24px] md:rounded-[40px]">
+                    <div class="feature-icon mb-4 md:mb-6 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center bg-white/5 rounded-2xl text-brand-orange">
+                        <i data-lucide="camera" class="w-7 h-7 md:w-8 md:h-8"></i>
+                    </div>
+                    <h3 class="text-xl md:text-2xl font-bold mb-3 md:mb-4">Smart Ingredient Scanner</h3>
+                    <p class="text-gray-500 text-sm md:text-base">Point your camera at your fridge or pantry and our AI instantly identifies all ingredients, quantities, and freshness levels.</p>
                 </div>
-                <div class="column-image">
-                    <img src="woman-cooking.jpg" alt="Woman using AI cooking assistant">
+                <!-- Feature 2 -->
+                <div class="reveal feature-card glass p-6 md:p-10 rounded-[24px] md:rounded-[40px]">
+                    <div class="feature-icon mb-4 md:mb-6 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center bg-white/5 rounded-2xl text-brand-orange">
+                        <i data-lucide="sparkles" class="w-7 h-7 md:w-8 md:h-8"></i>
+                    </div>
+                    <h3 class="text-xl md:text-2xl font-bold mb-3 md:mb-4">AI Recipe Matching</h3>
+                    <p class="text-gray-500 text-sm md:text-base">Get personalized recipe suggestions based on what you have, your skill level, dietary preferences, and available time.</p>
+                </div>
+                <!-- Feature 3 -->
+                <div class="reveal feature-card glass p-6 md:p-10 rounded-[24px] md:rounded-[40px]">
+                    <div class="feature-icon mb-4 md:mb-6 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center bg-white/5 rounded-2xl text-brand-orange">
+                        <i data-lucide="eye" class="w-7 h-7 md:w-8 md:h-8"></i>
+                    </div>
+                    <h3 class="text-xl md:text-2xl font-bold mb-3 md:mb-4">Real-Time Visual Coaching</h3>
+                    <p class="text-gray-500 text-sm md:text-base">Live video analysis provides hands-free guidance. Get alerts for heat levels, doneness, and technique corrections.</p>
+                </div>
+                <!-- Feature 4 -->
+                <div class="reveal feature-card glass p-6 md:p-10 rounded-[24px] md:rounded-[40px]">
+                    <div class="feature-icon mb-4 md:mb-6 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center bg-white/5 rounded-2xl text-brand-orange">
+                        <i data-lucide="mic" class="w-7 h-7 md:w-8 md:h-8"></i>
+                    </div>
+                    <h3 class="text-xl md:text-2xl font-bold mb-3 md:mb-4">Hands-Free "Hey Chef"</h3>
+                    <p class="text-gray-500 text-sm md:text-base">Control everything with your voice. Messy hands? No problem. The Chef listens and speaks back.</p>
+                </div>
+                <!-- Feature 5 -->
+                <div class="reveal feature-card glass p-6 md:p-10 rounded-[24px] md:rounded-[40px]">
+                    <div class="feature-icon mb-4 md:mb-6 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center bg-white/5 rounded-2xl text-brand-orange">
+                        <i data-lucide="shield-check" class="w-7 h-7 md:w-8 md:h-8"></i>
+                    </div>
+                    <h3 class="text-xl md:text-2xl font-bold mb-3 md:mb-4">Safety Guardrails</h3>
+                    <p class="text-gray-500 text-sm md:text-base">Real-time alerts for fire hazards, improper knife technique, and sanitation risks to keep you safe.</p>
+                </div>
+                <!-- Feature 6 -->
+                <div class="reveal feature-card glass p-6 md:p-10 rounded-[24px] md:rounded-[40px]">
+                    <div class="feature-icon mb-4 md:mb-6 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center bg-white/5 rounded-2xl text-brand-orange">
+                        <i data-lucide="shopping-cart" class="w-7 h-7 md:w-8 md:h-8"></i>
+                    </div>
+                    <h3 class="text-xl md:text-2xl font-bold mb-3 md:mb-4">Smart Shopping Lists</h3>
+                    <p class="text-gray-500 text-sm md:text-base">Auto-generate shopping lists for any recipe. Track what you have, what you need, and optimize meal prep.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- How It Works -->
-    <section id="how-it-works" class="how-it-works">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-label">🎯 SIMPLE PROCESS</span>
-                <h2>How AI Make Food Works</h2>
-                <p>From scanning to serving in four simple steps</p>
+    <section id="how-it-works" class="py-20 md:py-32 px-4 md:px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="reveal text-center mb-12 md:mb-20">
+                <span class="inline-block glass text-brand-teal px-4 py-2 rounded-full text-xs font-bold tracking-widest uppercase mb-6">
+                    🎯 Simple Process
+                </span>
+                <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter mb-4">How It Works</h2>
+                <p class="text-gray-500 text-base md:text-lg">From scanning to serving in four simple steps</p>
             </div>
-            <div class="steps">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <h3>Scan Your Ingredients</h3>
-                    <p>Open the app and point your camera at your fridge, pantry, or groceries. AI identifies everything instantly.</p>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+                <!-- Step 1 -->
+                <div class="reveal step-card text-center">
+                    <div class="step-number w-16 h-16 md:w-20 md:h-20 mx-auto mb-4 md:mb-6 rounded-full border-4 border-brand-orange text-brand-orange flex items-center justify-center text-2xl md:text-3xl font-black bg-brand-dark">1</div>
+                    <h3 class="text-lg md:text-xl font-bold mb-2 md:mb-3">Scan Ingredients</h3>
+                    <p class="text-gray-500 text-sm md:text-base">Point your camera at your fridge, pantry, or groceries. AI identifies everything instantly.</p>
                 </div>
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <h3>Get Recipe Matches</h3>
-                    <p>Receive personalized recipe suggestions ranked by ingredient match, difficulty, time, and your preferences.</p>
+                <!-- Step 2 -->
+                <div class="reveal step-card text-center">
+                    <div class="step-number w-16 h-16 md:w-20 md:h-20 mx-auto mb-4 md:mb-6 rounded-full border-4 border-brand-orange text-brand-orange flex items-center justify-center text-2xl md:text-3xl font-black bg-brand-dark">2</div>
+                    <h3 class="text-lg md:text-xl font-bold mb-2 md:mb-3">Get Recipe Matches</h3>
+                    <p class="text-gray-500 text-sm md:text-base">Receive personalized suggestions ranked by ingredient match, difficulty, and your preferences.</p>
                 </div>
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <h3>Cook with AI Guidance</h3>
-                    <p>Follow step-by-step instructions with real-time video analysis, voice prompts, and smart timer management.</p>
+                <!-- Step 3 -->
+                <div class="reveal step-card text-center">
+                    <div class="step-number w-16 h-16 md:w-20 md:h-20 mx-auto mb-4 md:mb-6 rounded-full border-4 border-brand-orange text-brand-orange flex items-center justify-center text-2xl md:text-3xl font-black bg-brand-dark">3</div>
+                    <h3 class="text-lg md:text-xl font-bold mb-2 md:mb-3">Cook with AI</h3>
+                    <p class="text-gray-500 text-sm md:text-base">Follow step-by-step instructions with real-time video analysis and voice prompts.</p>
                 </div>
-                <div class="step">
-                    <div class="step-number">4</div>
-                    <h3>Enjoy & Improve</h3>
-                    <p>Rate your meal, save favorites, and watch your cooking skills improve over time with personalized insights.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Stats Section -->
-    <section class="stats">
-        <div class="container">
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <h3>35%</h3>
-                    <p>Less Food Waste</p>
-                </div>
-                <div class="stat-item">
-                    <h3>12min</h3>
-                    <p>Saved Per Meal</p>
-                </div>
-                <div class="stat-item">
-                    <h3>10K+</h3>
-                    <p>Recipes Available</p>
-                </div>
-                <div class="stat-item">
-                    <h3>99%</h3>
-                    <p>Ingredient Accuracy</p>
+                <!-- Step 4 -->
+                <div class="reveal step-card text-center">
+                    <div class="step-number w-16 h-16 md:w-20 md:h-20 mx-auto mb-4 md:mb-6 rounded-full border-4 border-brand-orange text-brand-orange flex items-center justify-center text-2xl md:text-3xl font-black bg-brand-dark">4</div>
+                    <h3 class="text-lg md:text-xl font-bold mb-2 md:mb-3">Enjoy & Improve</h3>
+                    <p class="text-gray-500 text-sm md:text-base">Rate your meal, save favorites, and watch your skills improve with personalized insights.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Newsletter/Signup Section -->
-    <section id="signup" class="newsletter">
-        <div class="container newsletter-content">
-            <h2>🍳 Be the First to Cook Smarter</h2>
-            <p>AI Make Food is launching soon! Join our waitlist to get early access, exclusive features, and be notified when we're ready to transform your kitchen.</p>
-            <form class="newsletter-form" id="signupForm">
-                <input type="email" id="emailInput" placeholder="Enter your email address" required>
-                <button type="submit">Get Early Access</button>
-            </form>
-            <div class="form-message" id="formMessage"></div>
+    <!-- Safety Section -->
+    <section id="safety" class="py-20 md:py-32 px-4 md:px-6 bg-[#080808]">
+        <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 md:gap-16 items-center">
+            <div class="reveal relative order-2 lg:order-1">
+                <div class="teal-glow rounded-[32px] md:rounded-[40px] overflow-hidden glass p-3 md:p-4">
+                    <img src="photo-1507048331197-7d4ac70811cf.jpeg" class="rounded-[24px] md:rounded-[32px] w-full" alt="Safe Cooking">
+                </div>
+            </div>
+            <div class="reveal order-1 lg:order-2">
+                <span class="inline-block glass text-brand-teal px-4 py-2 rounded-full text-xs font-bold tracking-widest uppercase mb-6">
+                    🛡️ Safety First
+                </span>
+                <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter mb-6 md:mb-8 leading-tight">
+                    Cook Confidently. <br> <span class="text-brand-teal">Stay Safe.</span>
+                </h2>
+                <div class="space-y-6 text-gray-400 text-base md:text-lg">
+                    <p>Our AI doesn't just help you cook better—it keeps you safe with real-time hazard detection and proactive alerts.</p>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <span class="w-6 h-6 rounded-full bg-brand-teal flex items-center justify-center text-black text-sm font-bold shrink-0 mt-0.5">✓</span>
+                            <span>Fire and smoke detection with instant alerts</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="w-6 h-6 rounded-full bg-brand-teal flex items-center justify-center text-black text-sm font-bold shrink-0 mt-0.5">✓</span>
+                            <span>Knife technique monitoring for proper grip and cutting</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="w-6 h-6 rounded-full bg-brand-teal flex items-center justify-center text-black text-sm font-bold shrink-0 mt-0.5">✓</span>
+                            <span>Temperature warnings for undercooked proteins</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="w-6 h-6 rounded-full bg-brand-teal flex items-center justify-center text-black text-sm font-bold shrink-0 mt-0.5">✓</span>
+                            <span>Allergy warnings based on your dietary profile</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="w-6 h-6 rounded-full bg-brand-teal flex items-center justify-center text-black text-sm font-bold shrink-0 mt-0.5">✓</span>
+                            <span>Cross-contamination prevention tips</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Waitlist Section -->
+    <section id="waitlist" class="py-20 md:py-32 px-4 md:px-6">
+        <div class="max-w-4xl mx-auto glass rounded-[32px] md:rounded-[50px] p-6 md:p-12 lg:p-20 text-center relative overflow-hidden orange-glow">
+            <div class="reveal relative z-10">
+                <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter mb-6 md:mb-8 leading-tight">
+                    Be the First to <br> <span class="text-gradient">Cook Smarter</span>
+                </h2>
+                <p class="text-gray-400 text-base md:text-lg mb-8 md:mb-12 max-w-xl mx-auto">
+                    AI Make Food is launching soon! Join our waitlist for early access, exclusive features, and be notified when we're ready to transform your kitchen.
+                </p>
+                
+                <form id="waitlistForm" class="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
+                    <input type="email" id="emailInput" placeholder="Enter your email address" required
+                        class="flex-1 bg-white/5 border border-white/10 rounded-full px-6 md:px-8 py-4 md:py-5 text-white focus:outline-none focus:border-brand-orange transition-all placeholder-gray-500">
+                    <button type="submit" id="submitBtn"
+                        class="bg-brand-orange text-white px-8 md:px-10 py-4 md:py-5 rounded-full font-bold hover:scale-105 transition-transform disabled:opacity-50 whitespace-nowrap">
+                        Get Early Access
+                    </button>
+                </form>
+                <div id="formMessage" class="form-message mt-6 font-bold text-sm"></div>
+            </div>
+            
+            <!-- Abstract background shapes -->
+            <div class="absolute -top-24 -right-24 w-48 md:w-64 h-48 md:h-64 bg-brand-orange opacity-10 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-24 -left-24 w-48 md:w-64 h-48 md:h-64 bg-brand-teal opacity-10 rounded-full blur-3xl"></div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <a href="#" class="logo">
-                        <span class="logo-icon">🍳</span>
-                        <span class="logo-text">AI Make Food</span>
-                    </a>
-                    <p>Your intelligent sous chef that sees, thinks, and guides you from pantry to plate. Powered by Gemini 3 AI.</p>
-                    <div class="social-links">
-                        <a href="https://x.com/AIMakeFood" aria-label="Twitter">𝕏</a>
-                        <a href="https://instagram.com/AIMakeFoodCom" aria-label="Instagram">📷</a>
-                        <a href="https://www.tiktok.com/@aimakefood" aria-label="TikTok">🎵</a>
+    <footer class="py-16 md:py-20 px-4 md:px-6 border-t border-white/5">
+        <div class="max-w-7xl mx-auto">
+            <!-- Footer Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 mb-12 md:mb-16">
+                <!-- Brand -->
+                <div class="col-span-2 md:col-span-1">
+                    <div class="flex items-center gap-2 text-2xl font-black tracking-tighter mb-4">
+                        <span>🍳</span> <span>AIMakeFood</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-6">Your intelligent sous chef that sees, thinks, and guides you from pantry to plate. Powered by Gemini 3 AI.</p>
+                    <div class="flex gap-4">
+                        <a href="https://x.com/AIMakeFood" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-brand-orange hover:bg-white/10 transition-all" aria-label="Twitter">
+                            <i data-lucide="twitter" class="w-5 h-5"></i>
+                        </a>
+                        <a href="https://instagram.com/AIMakeFoodCom" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-brand-orange hover:bg-white/10 transition-all" aria-label="Instagram">
+                            <i data-lucide="instagram" class="w-5 h-5"></i>
+                        </a>
+                        <a href="https://www.tiktok.com/@aimakefood" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-brand-orange hover:bg-white/10 transition-all" aria-label="TikTok">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="w-4 h-4 fill-current">
+                                <path d="M448.5 209.9c-44 .1-87-13.6-122.8-39.2l0 178.7c0 33.1-10.1 65.4-29 92.6s-45.6 48-76.6 59.6-64.8 13.5-96.9 5.3-60.9-25.9-82.7-50.8-35.3-56-39-88.9 2.9-66.1 18.6-95.2 40-52.7 69.6-67.7 62.9-20.5 95.7-16l0 89.9c-15-4.7-31.1-4.6-46 .4s-27.9 14.6-37 27.3-14 28.1-13.9 43.9 5.2 31 14.5 43.7 22.4 22.1 37.4 26.9 31.1 4.8 46-.1 28-14.4 37.2-27.1 14.2-28.1 14.2-43.8l0-349.4 88 0c-.1 7.4 .6 14.9 1.9 22.2 3.1 16.3 9.4 31.9 18.7 45.7s21.3 25.6 35.2 34.6c19.9 13.1 43.2 20.1 67 20.1l0 87.4z"/>
+                            </svg>
+                        </a>
+                        <a href="https://github.com/aimakefood" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-brand-orange hover:bg-white/10 transition-all" aria-label="GitHub">
+                            <i data-lucide="github" class="w-5 h-5"></i>
+                        </a>
                     </div>
                 </div>
-                <div class="footer-section">
-                    <h3>Features</h3>
-                    <ul>
-                        <li><a href="#features">Ingredient Scanner</a></li>
-                        <li><a href="#features">Recipe Matching</a></li>
-                        <li><a href="#features">Visual Coaching</a></li>
-                        <li><a href="#features">Shopping Lists</a></li>
+
+                <!-- Features -->
+                <div>
+                    <h3 class="font-bold text-white mb-4">Features</h3>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="#features" class="text-gray-500 hover:text-brand-orange transition-colors">Ingredient Scanner</a></li>
+                        <li><a href="#features" class="text-gray-500 hover:text-brand-orange transition-colors">Recipe Matching</a></li>
+                        <li><a href="#features" class="text-gray-500 hover:text-brand-orange transition-colors">Visual Coaching</a></li>
+                        <li><a href="#features" class="text-gray-500 hover:text-brand-orange transition-colors">Shopping Lists</a></li>
                     </ul>
                 </div>
-                <div class="footer-section">
-                    <h3>Resources</h3>
-                    <ul>
-                        <li><a href="#how-it-works">How It Works</a></li>
-                        <li><a href="#">Recipe Blog</a></li>
-                        <li><a href="#">Cooking Tips</a></li>
-                        <li><a href="#">FAQ</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>Company</h3>
-                    <ul>
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Contact</a></li>
-                        <li><a href="privacy.html">Privacy Policy</a></li>
-                        <li><a href="terms.html">Terms of Service</a></li>
+
+                <!-- Company -->
+                <div>
+                    <h3 class="font-bold text-white mb-4">Company</h3>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="#how-it-works" class="text-gray-500 hover:text-brand-orange transition-colors">How It Works</a></li>
+                        <li><a href="#" class="text-gray-500 hover:text-brand-orange transition-colors">About Us</a></li>
+                        <li><a href="mailto:support@aimakefood.com" class="text-gray-500 hover:text-brand-orange transition-colors">Contact</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="footer-bottom">
-                <p>&copy; 2026 AI Make Food. All rights reserved. | <a href="privacy.html">Privacy</a> | <a href="terms.html">Terms</a></p>
+
+            <!-- Footer Bottom -->
+            <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-600">
+                <p>© 2026 AI Make Food. All rights reserved.</p>
+                <div class="flex gap-6">
+                    <a href="privacy.html" class="hover:text-brand-orange transition-colors">Privacy</a>
+                    <a href="terms.html" class="hover:text-brand-orange transition-colors">Terms</a>
+                    <span class="text-gray-700">app.aimakefood.com</span>
+                </div>
             </div>
         </div>
     </footer>
 
-    <!-- Supabase Integration Script -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Scripts -->
     <script>
-        // Initialize Supabase - Replace with your actual credentials
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            var nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('glass', 'py-2');
+                nav.classList.remove('py-4');
+            } else {
+                nav.classList.remove('glass', 'py-2');
+                nav.classList.add('py-4');
+            }
+        });
+
+        // Scroll Reveal Animation
+        var observerOptions = { threshold: 0.1 };
+        var observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                var target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Supabase Configuration
         var SUPABASE_URL = 'https://xhswiizneqphltobsxkw.supabase.co';
         var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhoc3dpaXpuZXFwaGx0b2JzeGt3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcxNzI5NTEsImV4cCI6MjA3Mjc0ODk1MX0.HiZZ1RTSqOf0dbc9xBbmWGaaEKaI1bM3GtCxOcdMABI';
         
@@ -1158,72 +570,77 @@
                 persistSession: false
             }
         });
-        
-        // Handle form submission
-        document.getElementById('signupForm').addEventListener('submit', async function(e) {
+
+        // Waitlist Form Handling
+        var form = document.getElementById('waitlistForm');
+        var submitBtn = document.getElementById('submitBtn');
+        var responseMsg = document.getElementById('formMessage');
+        var emailInput = document.getElementById('emailInput');
+
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
+            var email = emailInput.value.toLowerCase().trim();
             
-            var email = document.getElementById('emailInput').value.toLowerCase().trim();
-            var messageDiv = document.getElementById('formMessage');
-            var submitButton = this.querySelector('button');
-            
-            submitButton.disabled = true;
-            submitButton.textContent = 'Joining...';
-            messageDiv.style.display = 'none';
-            
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Joining...';
+            responseMsg.classList.remove('show');
+
+            // Track signup event
+            gtag('event', 'signup', {
+                'event_category': 'Form',
+                'event_label': 'Waitlist Email Submission'
+            });
+
             try {
-                gtag('event', 'signup', {
-                    'event_category': 'Form',
-                    'event_label': 'Waitlist Email Submission'
-                });
-                
                 var { data, error } = await db
                     .from('aimakefood_waitlist')
                     .insert([{ 
                         email: email,
-                        source: 'landing_page',
-                        referrer: document.referrer || 'direct'
-                    }])
-                    .select();
+                        source: 'landing_page_v2',
+                    }]);
+
+                responseMsg.classList.add('show');
                 
                 if (error) {
                     if (error.code === '23505' || error.message.includes('duplicate')) {
-                        messageDiv.className = 'form-message success';
-                        messageDiv.textContent = "🎉 You're already on our waitlist! We'll notify you when we launch.";
-                        document.getElementById('emailInput').value = '';
+                        responseMsg.textContent = "🎉 You're already on our waitlist! We'll notify you when we launch.";
+                        responseMsg.className = 'form-message show text-brand-teal';
+                        emailInput.value = '';
                     } else {
                         throw error;
                     }
                 } else {
-                    messageDiv.className = 'form-message success';
-                    messageDiv.textContent = "🎉 Success! You're on the list. We'll email you when AI Make Food is ready.";
-                    document.getElementById('emailInput').value = '';
+                    responseMsg.textContent = "🎉 Welcome to the future of cooking. You're on the list!";
+                    responseMsg.className = 'form-message show text-brand-teal';
+                    emailInput.value = '';
                     
+                    // Track successful conversion
                     gtag('event', 'conversion', {
                         'event_category': 'Conversion',
                         'event_label': 'Waitlist Signup Success'
                     });
                 }
-                
-                messageDiv.style.display = 'block';
-                
             } catch (error) {
                 console.error('Error:', error);
-                messageDiv.className = 'form-message error';
-                messageDiv.textContent = '⚠️ Something went wrong. Please try again.';
-                messageDiv.style.display = 'block';
+                responseMsg.textContent = '⚠️ Something went wrong. Please try again.';
+                responseMsg.className = 'form-message show text-red-500';
+                
+                gtag('event', 'exception', {
+                    'description': 'Waitlist signup error: ' + (error.message || 'Unknown error'),
+                    'fatal': false
+                });
             } finally {
-                submitButton.disabled = false;
-                submitButton.textContent = 'Get Early Access';
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Get Early Access';
             }
         });
-        
+
         // Track page view
         gtag('event', 'page_view', {
-            'page_title': 'AI Make Food Landing Page',
+            'page_title': 'AI Make Food Landing Page v2',
             'page_location': window.location.href
         });
-        
+
         // Track scroll depth
         let scrollTracked = {25: false, 50: false, 75: false, 100: false};
         window.addEventListener('scroll', function() {
@@ -1234,20 +651,20 @@
                     scrollTracked[depth] = true;
                     gtag('event', 'scroll', {
                         'event_category': 'Engagement',
-                        'event_label': 'Scroll Depth ' + depth + '%'
+                        'event_label': 'Scroll Depth ' + depth + '%',
+                        'value': parseInt(depth)
                     });
                 }
             });
         });
-        
-        // Smooth scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
+
+        // Track CTA clicks
+        document.querySelectorAll('a[href="#waitlist"], a[href="#how-it-works"]').forEach(function(link) {
+            link.addEventListener('click', function() {
+                gtag('event', 'click', {
+                    'event_category': 'CTA',
+                    'event_label': this.textContent.trim()
+                });
             });
         });
     </script>
