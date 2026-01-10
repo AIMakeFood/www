@@ -195,8 +195,8 @@
     <!-- Hero Section -->
     <section class="relative h-screen flex items-center justify-center overflow-hidden">
         <div class="video-docker absolute inset-0 z-0">
-            <video autoplay muted loop playsinline poster="https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg">
-                <source src="https://player.vimeo.com/external/494163967.sd.mp4?s=548c26d471e84762c431412530ba025a17697420&profile_id=164&oauth2_token_id=57447761" type="video/mp4">
+            <video autoplay muted loop playsinline poster="4k-4k-background-4k-resolution-4k-video-12632758.jpeg">
+                <source src="12632758-uhd_3840_2160_25fps.mp4" type="video/mp4">
             </video>
         </div>
         <div class="video-overlay absolute inset-0 z-10"></div>
@@ -273,7 +273,7 @@
             </div>
             <div class="reveal relative">
                 <div class="orange-glow rounded-[32px] md:rounded-[40px] overflow-hidden glass p-3 md:p-4">
-                    <img src="photo-1556910103-1c02745aae4d.jpeg" class="rounded-[24px] md:rounded-[32px] w-full" alt="AI Vision Demo">
+                    <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&q=80&w=1000" class="rounded-[24px] md:rounded-[32px] w-full" alt="AI Vision Demo">
                     <!-- Overlay markers mimicking app UI -->
                     <div class="absolute top-8 md:top-12 left-6 md:left-12 glass px-2 md:px-3 py-1 rounded-full text-[8px] md:text-[10px] font-bold text-brand-teal border-brand-teal/50">✓ ONION DETECTED</div>
                     <div class="absolute top-16 md:top-24 right-6 md:right-12 glass px-2 md:px-3 py-1 rounded-full text-[8px] md:text-[10px] font-bold text-brand-teal border-brand-teal/50">✓ GARLIC DETECTED</div>
@@ -390,7 +390,7 @@
         <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 md:gap-16 items-center">
             <div class="reveal relative order-2 lg:order-1">
                 <div class="teal-glow rounded-[32px] md:rounded-[40px] overflow-hidden glass p-3 md:p-4">
-                    <img src="photo-1507048331197-7d4ac70811cf.jpeg" class="rounded-[24px] md:rounded-[32px] w-full" alt="Safe Cooking">
+                    <img src="https://images.unsplash.com/photo-1507048331197-7d4ac70811cf?auto=format&fit=crop&q=80&w=1000" class="rounded-[24px] md:rounded-[32px] w-full" alt="Safe Cooking">
                 </div>
             </div>
             <div class="reveal order-1 lg:order-2">
@@ -527,7 +527,7 @@
 
         // Navbar scroll effect
         window.addEventListener('scroll', () => {
-            var nav = document.getElementById('navbar');
+            const nav = document.getElementById('navbar');
             if (window.scrollY > 50) {
                 nav.classList.add('glass', 'py-2');
                 nav.classList.remove('py-4');
@@ -538,8 +538,8 @@
         });
 
         // Scroll Reveal Animation
-        var observerOptions = { threshold: 0.1 };
-        var observer = new IntersectionObserver((entries) => {
+        const observerOptions = { threshold: 0.1 };
+        const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('active');
@@ -553,7 +553,7 @@
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
-                var target = document.querySelector(this.getAttribute('href'));
+                const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
                     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
@@ -572,14 +572,14 @@
         });
 
         // Waitlist Form Handling
-        var form = document.getElementById('waitlistForm');
-        var submitBtn = document.getElementById('submitBtn');
-        var responseMsg = document.getElementById('formMessage');
-        var emailInput = document.getElementById('emailInput');
+        const form = document.getElementById('waitlistForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const responseMsg = document.getElementById('formMessage');
+        const emailInput = document.getElementById('emailInput');
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            var email = emailInput.value.toLowerCase().trim();
+            const email = emailInput.value.toLowerCase().trim();
             
             submitBtn.disabled = true;
             submitBtn.textContent = 'Joining...';
@@ -592,7 +592,7 @@
             });
 
             try {
-                var { data, error } = await db
+                const { data, error } = await db
                     .from('aimakefood_waitlist')
                     .insert([{ 
                         email: email,
